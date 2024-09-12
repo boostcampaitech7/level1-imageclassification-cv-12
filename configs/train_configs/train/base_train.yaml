@@ -1,0 +1,36 @@
+data_module: "/data/ephemeral/home/level1-imageclassification-cv-12/src/data/custom_dataModules/sketch_data_module.SketchDataModule"
+model_module: "/data/ephemeral/home/level1-imageclassification-cv-12/src/plmodules/base_modules.나중에만들 클래스명"
+
+data_config_path: "/data/ephemeral/home/level1-imageclassification-cv-12/configs/data_configs/sketch_config.yaml"
+augmentation_config_path: "/data/ephemeral/home/level1-imageclassification-cv-12/configs/augmentation_configs/sketch_augmentation.yaml"
+
+model:
+  lr: 0.001
+
+optimizer:
+  name: Adam
+  params:
+    lr: 0.001
+
+scheduler:
+  name: StepLR
+  params:
+    step_size: 1
+    gamma: 0.7
+
+trainer:
+  max_epochs: 50
+  accelerator: gpu
+  devices: 1
+
+callbacks:
+  model_checkpoint:
+    monitor: val_loss
+    save_top_k: 3
+    mode: min
+  early_stopping:
+    monitor: val_loss
+    patience: 5
+    mode: min
+
+seed: 42  # 시드 값 추가

@@ -1,0 +1,16 @@
+# configs/augmentation_configs/mnist_augmentation.yaml
+augmentation:
+  use_augmentation: false
+  transforms:
+    - name: RandomRotation
+      params:
+        degrees: 10
+    - name: RandomAffine
+      params:
+        degrees: 0
+        translate: [0.1, 0.1]
+        scale: [0.9, 1.1]
+    - name: Normalize
+      params:
+        mean: [0.1307]
+        std: [0.3081]

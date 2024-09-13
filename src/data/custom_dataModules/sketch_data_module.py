@@ -5,13 +5,12 @@ import torch
 from torchvision import transforms
 
 from src.data.base_datamodule import BaseDataModule
-from src.data.collate_fns.mnist_collate_fn import mnist_collate_fn
-from src.data.datasets.mnist_dataset import CustomMNISTDataset
+from src.data.collate_fns.sketch_collate_fn import mnist_collate_fn
+from src.data.datasets.sketch_dataset import CustomSketchDataset
 from src.utils.data_utils import load_yaml_config
 
 
-# MNIST 데이터를 다운로드 받는다.
-class MNISTDataModule(BaseDataModule):
+class SketchDataModule(BaseDataModule):
     def __init__(self, data_config_path: str, augmentation_config_path: str, seed: int):
         # 데이터 파일 경로 yaml 파일을 입력으로 받아 설정합니다. 
         self.data_config = load_yaml_config(data_config_path)
@@ -33,25 +32,30 @@ class MNISTDataModule(BaseDataModule):
         if self.augmentation_config["augmentation"]["use_augmentation"]:
             train_transforms = self._get_augmentation_transforms()
 
-        # 증강하지 않는다면 기본 Nomalization 진행한다.
+        # 나중에 증강하지 않는다면 기본 Nomalization 진행한다.
         else:
             train_transforms = transforms.Compose(
-                [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
+                [
+                    transforms.Resize((224, 224)),  # 이미지를 224x224 크기로 리사이즈
+                    transforms.ToTensor(),  # 이미지를 텐서로 변환
+                ]
             )
 
+
+        # 나중에 기본적인 변환 과정 설정하기
         test_transforms = transforms.Compose(
-            [transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))]
+            [transforms.ToTensor()]
         )
 
         # Load datasets
         raw_data_path = self.config["data"]["raw_data_path"]
 
         # 실제 데이터를 가지고 와서 Train, Test로 나누어준다.
-        self.train_dataset = CustomMNISTDataset(
+        self.train_dataset = CustomSketchDataset(
             data_dir=raw_data_path, train=True, transform=train_transforms
         )
 
-        self.test_dataset = CustomMNISTDataset(
+        self.test_dataset = CustomSketchDataset(
             data_dir=raw_data_path, train=False, transform=test_transforms
         )
 
@@ -95,34 +99,14 @@ class MNISTDataModule(BaseDataModule):
             persistent_workers=True,
         )
 
+
+    # 여기서 변환을 하는 거 생각을 해보야할거같음
     def _get_augmentation_transforms(self):
         transform_list = [
             transforms.ToTensor(),
-            # 평균, 표준편차 이렇게 설정한 이유는 해당 값이 MNIST 데이터의 평균이기 때문이다. ( 모든 데이터의 평균과 표준편차로 정규화 하는 것도 하나의 방법이라고 한다. )
-            transforms.Normalize((0.1307,), (0.3081,)),
+            # transforms.Normalize((0.1307,), (0.3081,)),
         ]
 
-
-        '''
-        # configs/augmentation_configs/mnist_augmentation.yaml
-        augmentation:
-        use_augmentation: false
-        transforms:
-            - name: RandomRotation
-            params:
-                degrees: 10
-            - name: RandomAffine
-            params:
-                degrees: 0
-                translate: [0.1, 0.1]
-                scale: [0.9, 1.1]
-            - name: Normalize
-            params:
-                mean: [0.1307]
-                std: [0.3081]
-
-        /configs/augmentation_configs 안에 위와 같이 설정되어있다. 그래서 name, params를 사용해서 다음과 같이 정규화가 가능한거다.
-        '''
         for transform_config in self.augmentation_config["augmentation"]["transforms"]:
             transform_class = getattr(transforms, transform_config["name"])
             transform_list.append(transform_class(**transform_config["params"]))

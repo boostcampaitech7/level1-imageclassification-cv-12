@@ -5,7 +5,6 @@ import pytorch_lightning as pl
 from omegaconf import OmegaConf
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
-import matplotlib.pyplot as plt
 
 
 

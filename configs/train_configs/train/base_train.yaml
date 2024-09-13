@@ -1,5 +1,5 @@
-data_module: "/data/ephemeral/home/level1-imageclassification-cv-12/src/data/custom_dataModules/sketch_data_module.SketchDataModule"
-model_module: "/data/ephemeral/home/level1-imageclassification-cv-12/src/plmodules/base_modules.나중에만들 클래스명"
+data_module: "src.data.custom_dataModules.sketch_data_module.SketchDataModule"
+model_module: "src.plmodules.base_module.SketchBaseModule"
 
 data_config_path: "/data/ephemeral/home/level1-imageclassification-cv-12/configs/data_configs/sketch_config.yaml"
 augmentation_config_path: "/data/ephemeral/home/level1-imageclassification-cv-12/configs/augmentation_configs/sketch_augmentation.yaml"
@@ -19,7 +19,7 @@ scheduler:
     gamma: 0.7
 
 trainer:
-  max_epochs: 50
+  max_epochs: 10
   accelerator: gpu
   devices: 1
 

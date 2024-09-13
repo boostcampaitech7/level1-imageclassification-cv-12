@@ -15,7 +15,7 @@ def main(config_path, use_wandb=False):
     config = OmegaConf.load(config_path)
     print(config)
 
-    # 데이터 모듈 동적 임포트
+    # 데이터 모듈 경로와 클래스명으로 분리한다.
     data_module_path, data_module_class = config.data_module.rsplit(".", 1)
     DataModuleClass = getattr(
         importlib.import_module(data_module_path), data_module_class

@@ -7,14 +7,16 @@ from torchmetrics.classification import (
     MulticlassPrecision,
     MulticlassRecall,
 )
-from src.models.base_model import BaseModel
-
+from src.models.EfficientNetB4 import EfficientNetB4
+import pandas as pd
+import os
+from datetime import datetime
 
 class SketchBaseModule(pl.LightningModule):
     def __init__(self, config):
         super(SketchBaseModule, self).__init__()
         self.config = config
-        self.model = BaseModel(config.model)
+        self.model = EfficientNetB4(config.model)
 
         # 수정: num_classes를 500으로 설정
         self.precision = MulticlassPrecision(num_classes=500, average="macro")
@@ -27,6 +29,9 @@ class SketchBaseModule(pl.LightningModule):
         self.test_results = {}
         self.test_step_outputs = []
 
+        # 테스트용 CSV 파일 경로
+        self.test_csv_path = "/data/ephemeral/home/level1-imageclassification-cv-12/data/sketch/test.csv"  # 'test.csv' 파일 경로
+
     def forward(self, x):
         return self.model(x)
 
@@ -35,72 +40,76 @@ class SketchBaseModule(pl.LightningModule):
         y_hat = self.forward(x)
         loss = F.cross_entropy(y_hat, y)
 
-        # y_hat을 클래스 레이블로 변환
         preds = torch.argmax(y_hat, dim=1)
-        
-        # 로깅
         self.log("train_loss", loss, on_step=True, on_epoch=True, prog_bar=True)
-        # self.log("train_precision", self.precision(preds, y), on_step=True, on_epoch=True, prog_bar=True)
-        # self.log("train_recall", self.recall(preds, y), on_step=True, on_epoch=True, prog_bar=True)
-        # self.log("train_f1_score", self.f1_score(preds, y), on_step=True, on_epoch=True, prog_bar=True)
         return loss
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
         y_hat = self.forward(x)
-
-        # y_hat을 클래스 레이블로 변환
         preds = torch.argmax(y_hat, dim=1)
-
         loss = F.cross_entropy(y_hat, y)
         self.log("val_loss", loss, prog_bar=True)
-        # self.log("val_precision", self.precision(preds, y), prog_bar=True)
-        # self.log("val_recall", self.recall(preds, y), prog_bar=True)
-        # self.log("val_f1_score", self.f1_score(preds, y), prog_bar=True)
         return loss
 
-    # 에포크 시작시 output을 초기화 시킨다.
     def on_test_epoch_start(self):
-        self.test_step_outputs = []  # 테스트 에포크 시작 시 초기화
+        self.test_step_outputs = []
 
-    # 한번의 테스트 (배치 ) 에 대한 처리를 진행한다.
+        # 테스트 CSV 파일 읽기
+        self.test_df = pd.read_csv(self.test_csv_path)
+
     def test_step(self, batch, batch_idx):
-        x, y = batch
+        # 배치가 여러 개의 값을 가질 수 있으므로, 길이를 확인하여 처리합니다.
+        if isinstance(batch, tuple) or isinstance(batch, list):
+            if len(batch) == 1:
+                x = batch[0]  # 배치가 이미지 데이터만 가진 경우
+            elif len(batch) == 2:
+                x, _ = batch  # 배치가 이미지와 레이블을 가진 경우
+            else:
+                raise ValueError(f"Unexpected number of values in batch: {len(batch)}")  # 에러 메시지에 길이 포함
+        else:
+            raise ValueError("Batch should be a tuple or list.")
+
         y_hat = self.forward(x)
-        loss = F.cross_entropy(y_hat, y)
-
-        # y_hat을 클래스 레이블로 변환
         preds = torch.argmax(y_hat, dim=1)
+        
+        # 예측 결과를 리스트에 추가합니다.
+        self.test_step_outputs.append(preds)
 
-        self.log("test_loss", loss, prog_bar=True)
-        # self.log("test_precision", self.precision(preds, y), prog_bar=True)
-        # self.log("test_recall", self.recall(preds, y), prog_bar=True)
-        # self.log("test_f1_score", self.f1_score(preds, y), prog_bar=True)
-        output = {"loss": loss, "preds": preds, "targets": y}
-        self.test_step_outputs.append(output)
-        return output
+        # 예측 결과의 평균을 로그로 남깁니다. (단일 스칼라 값)
+        self.log("test_predictions_mean", preds.float().mean(), prog_bar=True)
+        
+        return preds
 
-    # 모든 테스트가 종료되었을때 호출된다 ( acc를 계산하는 과정 )
     def on_test_epoch_end(self):
-        outputs = self.test_step_outputs
-        preds = torch.cat([output["preds"] for output in outputs])
-        targets = torch.cat([output["targets"] for output in outputs])
+        # 모든 예측 결과를 결합
+        if self.test_step_outputs:
+            preds = torch.cat(self.test_step_outputs).cpu().numpy()
 
-        self.test_results["predictions"] = preds
-        self.test_results["targets"] = targets
+            # 모델 이름과 현재 날짜 및 시간으로 파일 이름 생성
+            model_name = type(self.model).__name__
+            current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            output_path = f"/data/ephemeral/home/level1-imageclassification-cv-12/results/{model_name}_{current_time}.csv"
 
-        accuracy = (preds == targets).float().mean()
-        self.log("test_accuracy", accuracy, prog_bar=True)
+            # ID를 생성하고 결과를 데이터프레임으로 변환
+            self.test_df["target"] = preds
+            self.test_df.insert(0, 'ID', range(len(self.test_df)))  # ID 열 추가
 
-        self.test_step_outputs.clear()  # 메모리 정리
+            # 예측 결과를 CSV 파일에 추가
+            self.test_df.to_csv(output_path, index=False)
+            print(f"Saved output CSV to {output_path}")
 
-    # 예측
+        else:
+            print("No test outputs to save.")
+
+        # 결과 리스트 초기화
+        self.test_step_outputs.clear()
+
     def predict_step(self, batch, batch_idx):
         x, _ = batch
         y_hat = self.forward(x)
         return y_hat
 
-    # optimizer를 가지고 온다.
     def configure_optimizers(self):
         optimizer_class = getattr(torch.optim, self.config.optimizer.name)
         optimizer = optimizer_class(self.parameters(), **self.config.optimizer.params)

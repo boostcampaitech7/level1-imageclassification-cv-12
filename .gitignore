@@ -1,3 +1,9 @@
 /data/ephemeral/home/level1-imageclassification-cv-12/data
 *.JPEG
 *.csv
+/data/ephemeral/home/level1-imageclassification-cv-12/lightning_logs
+/data/ephemeral/home/level1-imageclassification-cv-12/results
+/data/ephemeral/home/level1-imageclassification-cv-12/wandb
+*.yaml
+*.DS_Store
+*.ckpt

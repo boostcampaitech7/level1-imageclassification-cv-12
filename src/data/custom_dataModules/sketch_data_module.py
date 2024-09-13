@@ -5,11 +5,11 @@ import torch
 from torchvision import transforms
 
 from src.data.base_datamodule import BaseDataModule
-from src.data.collate_fns.sketch_collate_fn import mnist_collate_fn
+from src.data.collate_fns.sketch_collate_fn import sketch_collate_fn
 from src.data.datasets.sketch_dataset import CustomSketchDataset
 from src.utils.data_utils import load_yaml_config
 
-
+# MNIST 데이터를 다운로드 받는다.
 class SketchDataModule(BaseDataModule):
     def __init__(self, data_config_path: str, augmentation_config_path: str, seed: int):
         # 데이터 파일 경로 yaml 파일을 입력으로 받아 설정합니다. 
@@ -28,26 +28,20 @@ class SketchDataModule(BaseDataModule):
         # 시드 설정
         torch.manual_seed(self.seed)
 
-        # 증강할지 말지 결정한다. 기본으로 config에는 False로 설정되어있다.
+        # 증강을 한다면 _get_augmentation_transforms 해당 함수에서 필요한 증강을 하나의 모듈로 가져오게된다.
         if self.augmentation_config["augmentation"]["use_augmentation"]:
             train_transforms = self._get_augmentation_transforms()
-
-        # 나중에 증강하지 않는다면 기본 Nomalization 진행한다.
         else:
             train_transforms = transforms.Compose(
-                [
-                    transforms.Resize((224, 224)),  # 이미지를 224x224 크기로 리사이즈
-                    transforms.ToTensor(),  # 이미지를 텐서로 변환
-                ]
+                [transforms.ToTensor(), transforms.Resize((224, 224))]
             )
 
-
-        # 나중에 기본적인 변환 과정 설정하기
         test_transforms = transforms.Compose(
-            [transforms.ToTensor()]
+            [transforms.ToTensor(),
+             transforms.Resize((224, 224))]
         )
 
-        # Load datasets
+        # data/sketch 를 로드한다
         raw_data_path = self.config["data"]["raw_data_path"]
 
         # 실제 데이터를 가지고 와서 Train, Test로 나누어준다.
@@ -75,7 +69,7 @@ class SketchDataModule(BaseDataModule):
             batch_size=self.config["data"]["batch_size"], # 배치 사이즈 결정
             num_workers=self.config["data"]["num_workers"], # GPU 사용 
             shuffle=True,   # 섞을지 말지 결정
-            collate_fn=mnist_collate_fn, # 어떻게 배치를 나눌지 결정하는 함수가 정의 됨
+            collate_fn=sketch_collate_fn, # 어떻게 배치를 나눌지 결정하는 함수가 정의 됨
             persistent_workers=True, # 에폭이 끝나고 프로세스를 초기화 할지? 기본은 False인데 True로 설정하는것이 효율적이라고 한다
         )
     # val 데이터를 로드하는 함수이다.
@@ -85,7 +79,7 @@ class SketchDataModule(BaseDataModule):
             batch_size=self.config["data"]["batch_size"],
             num_workers=self.config["data"]["num_workers"],
             shuffle=False,
-            collate_fn=mnist_collate_fn,
+            collate_fn=sketch_collate_fn,
             persistent_workers=True,
         )
 
@@ -95,18 +89,15 @@ class SketchDataModule(BaseDataModule):
             batch_size=self.config["data"]["batch_size"],
             num_workers=self.config["data"]["num_workers"],
             shuffle=False,
-            collate_fn=mnist_collate_fn,
+            collate_fn=sketch_collate_fn,
             persistent_workers=True,
         )
 
-
-    # 여기서 변환을 하는 거 생각을 해보야할거같음
+    # augmentattion confing에 적용한 증강을 하나의 리스트에 담아서 리턴해준다.
     def _get_augmentation_transforms(self):
         transform_list = [
             transforms.ToTensor(),
-            # transforms.Normalize((0.1307,), (0.3081,)),
         ]
-
         for transform_config in self.augmentation_config["augmentation"]["transforms"]:
             transform_class = getattr(transforms, transform_config["name"])
             transform_list.append(transform_class(**transform_config["params"]))

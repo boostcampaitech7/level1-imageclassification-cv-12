@@ -1,22 +1,20 @@
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
-from torch import nn
+from torchvision.models import resnet18, ResNet18_Weights
 
-# 실제 학습을 시킬 베이스 모델을 만들어둔다.
 class BaseModel(nn.Module):
     def __init__(self, config):
         super(BaseModel, self).__init__()
         self.config = config
-
-        # 224 * 224 이미지에 맞춘 첫 번째 Linear layer
-        self.layer_1 = nn.Linear(224 * 224 * 3, 1024)  # 입력 채널 3 (RGB 이미지)
-        self.layer_2 = nn.Linear(1024, 512)  # 중간 레이어
-        self.layer_3 = nn.Linear(512, 500)   # 출력 클래스 수: 500
+        
+        # Pretrained ResNet18 모델 로드
+        self.resnet = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
+        
+        # ResNet18의 마지막 fully connected 레이어 수정 (500개의 클래스를 출력하도록)
+        num_ftrs = self.resnet.fc.in_features
+        self.resnet.fc = nn.Linear(num_ftrs, 500)
 
     def forward(self, x):
-        # 입력을 flatten
-        x = x.view(x.size(0), -1)
-        x = F.relu(self.layer_1(x))
-        x = F.relu(self.layer_2(x))
-        x = self.layer_3(x)
+        x = self.resnet(x)
         return x

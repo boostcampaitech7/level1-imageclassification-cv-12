@@ -77,9 +77,12 @@ def augment_and_save_images(data_dir, save_dir, num_augmentations):
     new_df.to_csv(new_labels_path, index=False)
     print(f"New augmented dataset saved at: {new_labels_path}")
 
+# 사용자로부터 폴더명을 입력받는 과정 추가
+folder_name = input("Enter the folder name for saving augmented data: ")
+
 # 데이터 증강 적용 및 저장
 augment_and_save_images(
     data_dir='/data/ephemeral/home/level1-imageclassification-cv-12/data/sketch',  # 올바른 데이터셋 경로
-    save_dir='/data/ephemeral/home/level1-imageclassification-cv-12/data/sketch/augmented',  # 증강 데이터셋 저장 경로
+    save_dir=f'/data/ephemeral/home/level1-imageclassification-cv-12/data/sketch/{folder_name}',  # 입력받은 폴더명 사용
     num_augmentations=5  # 각 이미지 당 증강 개수
 )

@@ -1,5 +1,5 @@
 augmentation:
-  use_augmentation: false  # 데이터 증강 사용 여부
+  use_augmentation: True  # 데이터 증강 사용 여부
   transforms:
     - name: RandomRotation
       params:
@@ -12,17 +12,13 @@ augmentation:
         scale: [0.8, 1.2]  # 이미지 크기 변환 범위
         shear: [5, 5]  # 이미지 기울기 변환
 
+    - name: ColorJitter
+      params:
+        brightness: 0.2  # 밝기 조정 범위
+        contrast: 0.2  # 대비 조정 범위
+        saturation: 0.2  # 채도 조정 범위
+        hue: 0.1  # 색조 조정 범위
+
     - name: RandomHorizontalFlip
       params:
-        p: 0.5  # 50% 확률로 이미지 좌우 반전
-
-    - name: RandomVerticalFlip
-      params:
-        p: 0.3  # 30% 확률로 이미지 상하 반전
-
-    - name: RandomResizedCrop
-      params:
-        size: [224, 224]  # 출력 크기
-        scale: [0.8, 1.0]  # 랜덤으로 자를 스케일 범위
-        ratio: [0.75, 1.33]  # 가로세로 비율 범위
-
+        p: 0.5  # 50% 확률로 좌우 반전

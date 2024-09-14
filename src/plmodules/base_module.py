@@ -7,16 +7,18 @@ from torchmetrics.classification import (
     MulticlassPrecision,
     MulticlassRecall,
 )
-from src.models.EfficientNetB4 import EfficientNetB4
+from src.models.resnet34 import ResNet34
 import pandas as pd
 import os
 from datetime import datetime
+from datetime import datetime
+import pytz
 
 class SketchBaseModule(pl.LightningModule):
     def __init__(self, config):
         super(SketchBaseModule, self).__init__()
         self.config = config
-        self.model = EfficientNetB4(config.model)
+        self.model = ResNet34(config.model)
 
         # 수정: num_classes를 500으로 설정
         self.precision = MulticlassPrecision(num_classes=500, average="macro")
@@ -26,7 +28,7 @@ class SketchBaseModule(pl.LightningModule):
         # wandb logger 설정 (필요시 프로젝트명과 이름 변경)
         self.wandb_logger = WandbLogger(project="SketchProject", name="Sketch_Test")
         
-        self.test_results = {}
+        self.test_results = {} 
         self.test_step_outputs = []
 
         # 테스트용 CSV 파일 경로
@@ -81,29 +83,64 @@ class SketchBaseModule(pl.LightningModule):
         
         return preds
 
+    # def on_test_epoch_end(self):
+    #     # 모든 예측 결과를 결합
+    #     if self.test_step_outputs:
+    #         preds = torch.cat(self.test_step_outputs).cpu().numpy()
+
+    #         # 모델 이름과 현재 날짜 및 시간으로 파일 이름 생성
+    #         model_name = type(self.model).__name__
+    #         current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    #         output_path = f"/data/ephemeral/home/level1-imageclassification-cv-12/results/{model_name}_{current_time}_now.csv"
+
+    #         # ID를 생성하고 결과를 데이터프레임으로 변환
+    #         self.test_df["target"] = preds
+    #         self.test_df.insert(0, 'ID', range(len(self.test_df)))  # ID 열 추가
+
+    #         # 예측 결과를 CSV 파일에 추가
+    #         self.test_df.to_csv(output_path, index=False)
+    #         print(f"Saved output CSV to {output_path}")
+
+    #     else:
+    #         print("No test outputs to save.")
+
+    #     # 결과 리스트 초기화
+    #     self.test_step_outputs.clear()
+
     def on_test_epoch_end(self):
         # 모든 예측 결과를 결합
         if self.test_step_outputs:
             preds = torch.cat(self.test_step_outputs).cpu().numpy()
 
+            # 예측한 값의 길이와 데이터프레임의 길이를 맞추기 위한 처리
+            expected_length = len(self.test_df)
+            if len(preds) > expected_length:
+                preds = preds[:expected_length]  # 예측된 값의 길이를 데이터프레임의 길이에 맞춤
+            elif len(preds) < expected_length:
+                raise ValueError(f"Predictions length {len(preds)} does not match DataFrame length {expected_length}")
+
+            # ID 열 추가
+            self.test_df["ID"] = range(len(self.test_df))
+            
+            # 예측 결과를 "target" 열에 추가
+            self.test_df["target"] = preds
+
+            # 필요한 순서대로 열을 재정렬
+            self.test_df = self.test_df[["ID", "image_path", "target"]]
+
+
+            kst = pytz.timezone('Asia/Seoul')
+
             # 모델 이름과 현재 날짜 및 시간으로 파일 이름 생성
             model_name = type(self.model).__name__
-            current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            current_time = datetime.now(pytz.utc).astimezone(kst).strftime("%Y-%m-%d_%H-%M-%S")
             output_path = f"/data/ephemeral/home/level1-imageclassification-cv-12/results/{model_name}_{current_time}.csv"
 
-            # ID를 생성하고 결과를 데이터프레임으로 변환
-            self.test_df["target"] = preds
-            self.test_df.insert(0, 'ID', range(len(self.test_df)))  # ID 열 추가
-
-            # 예측 결과를 CSV 파일에 추가
+            # 변경된 경로로 CSV 파일 저장
             self.test_df.to_csv(output_path, index=False)
             print(f"Saved output CSV to {output_path}")
-
         else:
             print("No test outputs to save.")
-
-        # 결과 리스트 초기화
-        self.test_step_outputs.clear()
 
     def predict_step(self, batch, batch_idx):
         x, _ = batch

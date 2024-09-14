@@ -7,4 +7,13 @@
 *.DS_Store
 *.ckpt*.jpg
 /data/sketch/*.jpg
-/data/ephemeral/home/level1-imageclassification-cv-12/data/sketch
+# 무시할 파일 및 디렉토리 패턴 추가
+*.jpg
+*.JPEG
+*.csv
+/data/sketch/*.jpg
+/data/ephemeral/home/level1-imageclassification-cv-12/data/sketch/*
+/data/ephemeral/home/level1-imageclassification-cv-12/lightning_logs/*
+*.ckpt
+*.pyc
+hparams.yaml

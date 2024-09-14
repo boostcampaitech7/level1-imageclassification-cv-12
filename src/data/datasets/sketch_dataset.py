@@ -42,23 +42,70 @@ class CustomSketchDataset(Dataset):
         return len(self.labels_path)
 
     def __getitem__(self, idx):
-        # 이미지 경로와 레이블을 가져옵니다.
-        img_path_in_csv = self.labels_path.loc[idx, 'image_path']  # 'image_path' 열로 접근
-        img_path = os.path.join(self.images_path, img_path_in_csv)  # 전체 이미지 경로
-
-        # 이미지 로드
-        try:
-            image = Image.open(img_path).convert("RGB")
-        except FileNotFoundError:
-            raise FileNotFoundError(f"Image file not found: {img_path}")
+        # 인덱스에 해당하는 이미지와 레이블 가져오기
+        img_path_in_csv = self.labels_path.loc[idx, 'image_path']
+        img_path = os.path.join(self.images_path, img_path_in_csv)
+        image = Image.open(img_path).convert("RGB")
 
         # 변환 적용
         if self.transform:
             image = self.transform(image)
 
-        # 항상 튜플을 반환
-        if self.train:
-            label = int(self.labels_path.loc[idx, 'target'])  # 'target' 열로 접근
-            return image, label
-        else:
-            return image, torch.tensor(-1)  # 테스트 데이터셋에서도 항상 두 개의 값을 반환
+        # 레이블 가져오기
+        label = int(self.labels_path.loc[idx, 'target']) if self.train else -1
+
+        return image, label
+
+
+
+# from torchvision import transforms
+# from torch.utils.data import Dataset
+# import pandas as pd
+# import os
+# from PIL import Image
+
+# class CustomSketchDataset(Dataset):
+#     def __init__(self, data_dir, train=True, transform=None):
+#         self.train = train
+#         self.data_dir = data_dir
+#         self.base_transform = transforms.Compose([transforms.ToTensor(), transforms.Resize((224, 224))])  # 원본
+#         self.transforms_list = [
+#             transforms.Compose([
+#                 transforms.RandomRotation(degrees=15)
+#             ]),
+#             transforms.Compose([
+#                 transforms.RandomAffine(degrees=0, translate=(0.1, 0.1), scale=(0.8, 1.2), shear=(5, 5))
+#             ])
+#         ]
+
+#         # 데이터 로딩
+#         if self.train:
+#             self.images_path = os.path.join(data_dir, 'train')
+#             self.labels_path = pd.read_csv(os.path.join(data_dir, 'train.csv'))
+#             self.labels = self.labels_path['target'].tolist()
+#         else:
+#             self.images_path = os.path.join(data_dir, 'test')
+#             self.labels_path = pd.read_csv(os.path.join(data_dir, 'test.csv'))
+#             if 'target' in self.labels_path.columns:
+#                 self.labels = self.labels_path['target'].tolist()
+#             else:
+#                 self.labels = None
+
+#     def __len__(self):
+#         # 데이터셋의 전체 길이를 반환
+#         return len(self.labels_path)
+
+#     def __getitem__(self, idx):
+#         # 인덱스에 해당하는 이미지와 레이블 가져오기
+#         img_path_in_csv = self.labels_path.loc[idx, 'image_path']
+#         img_path = os.path.join(self.images_path, img_path_in_csv)
+#         image = Image.open(img_path).convert("RGB")
+
+#         # 변환 적용
+#         if self.base_transform:
+#             image = self.base_transform(image)
+
+#         # 레이블 가져오기
+#         label = int(self.labels_path.loc[idx, 'target']) if self.train else -1
+
+#         return image, label

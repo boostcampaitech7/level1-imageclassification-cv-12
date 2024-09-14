@@ -4,6 +4,6 @@ data:
   processed_data_path: data/processed/sketch
   train_val_split: 0.8
   val_test_split: 0.7
-  batch_size: 32
-  num_workers: 11
+  batch_size: 64
+  num_workers: 8
   pin_memory: true

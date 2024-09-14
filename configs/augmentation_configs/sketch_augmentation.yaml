@@ -1,5 +1,5 @@
 augmentation:
-  use_augmentation: True  # 데이터 증강 사용 여부
+  use_augmentation: False  # 데이터 증강 사용 여부
   transforms:
     - name: RandomRotation
       params:

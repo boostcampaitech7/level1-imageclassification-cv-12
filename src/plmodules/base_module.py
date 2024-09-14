@@ -6,8 +6,9 @@ from torchmetrics.classification import (
     MulticlassF1Score,
     MulticlassPrecision,
     MulticlassRecall,
+    MulticlassAccuracy,
 )
-from src.models.resnet34 import ResNet34
+from src.models.ResNet101 import ResNet101
 import pandas as pd
 import os
 from datetime import datetime
@@ -18,12 +19,15 @@ class SketchBaseModule(pl.LightningModule):
     def __init__(self, config):
         super(SketchBaseModule, self).__init__()
         self.config = config
-        self.model = ResNet34(config.model)
+        self.model = ResNet101(config.model)
 
         # 수정: num_classes를 500으로 설정
         self.precision = MulticlassPrecision(num_classes=500, average="macro")
         self.recall = MulticlassRecall(num_classes=500, average="macro")
         self.f1_score = MulticlassF1Score(num_classes=500, average="macro")
+
+        # 추가: Validation Accuracy를 위한 Metric 초기화
+        self.accuracy = MulticlassAccuracy(num_classes=500)
         
         # wandb logger 설정 (필요시 프로젝트명과 이름 변경)
         self.wandb_logger = WandbLogger(project="SketchProject", name="Sketch_Test")
@@ -51,6 +55,11 @@ class SketchBaseModule(pl.LightningModule):
         y_hat = self.forward(x)
         preds = torch.argmax(y_hat, dim=1)
         loss = F.cross_entropy(y_hat, y)
+
+        # 수정: Validation Accuracy 계산 및 로그 추가
+        accuracy = self.accuracy(preds, y)
+        self.log("val_accuracy", accuracy * 100, prog_bar=True)
+
         self.log("val_loss", loss, prog_bar=True)
         return loss
 

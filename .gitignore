@@ -7,4 +7,4 @@
 *.DS_Store
 *.ckpt*.jpg
 /data/sketch/*.jpg
-
+/data/ephemeral/home/level1-imageclassification-cv-12/data/sketch

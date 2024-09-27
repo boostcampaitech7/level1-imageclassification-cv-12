@@ -9,7 +9,7 @@ from torchmetrics.classification import (
     MulticlassRecall,
     MulticlassAccuracy,
 )
-from src.models.BaseModel import EfficientNetV2L
+from src.models.CoAtNet3 import CoAtNet3
 import pandas as pd
 import os
 from datetime import datetime
@@ -56,12 +56,12 @@ class BaseModule(pl.LightningModule):
     def __init__(self, config):
         super(BaseModule, self).__init__()
         self.config = config
-        self.model = EfficientNetV2L(config.model)
+        self.model = CoAtNet3(config.model)
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = self.model.to(device)
 
         # CrossEntropy Loss with Label Smoothing 추가
-        self.criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
+        self.criterion = nn.CrossEntropyLoss(label_smoothing=0.15)
 
         # Metrics 설정
         self.precision = MulticlassPrecision(num_classes=500, average="macro")
@@ -183,3 +183,5 @@ class BaseModule(pl.LightningModule):
             return [optimizer], [scheduler]
         else:
             return optimizer
+
+

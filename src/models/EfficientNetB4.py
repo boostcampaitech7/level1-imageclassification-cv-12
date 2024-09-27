@@ -1,19 +1,19 @@
 import torch
 import torch.nn as nn
-from torchvision.models import efficientnet_b4, EfficientNet_B4_Weights
+import timm
 
 class EfficientNetB4(nn.Module):
     def __init__(self, config):
         super(EfficientNetB4, self).__init__()
         self.config = config
         
-        # Pretrained EfficientNet B4 모델 로드
-        self.efficientnet = efficientnet_b4(weights=EfficientNet_B4_Weights.IMAGENET1K_V1)
+        # 사전 학습된 EfficientNet-B3 모델 로드
+        self.efficientnet = timm.create_model('efficientnet_b4', pretrained=True)
         
-        # EfficientNet B4의 마지막 fully connected 레이어 수정 (500개의 클래스를 출력하도록)
-        num_ftrs = self.efficientnet.classifier[1].in_features
-        self.efficientnet.classifier[1] = nn.Linear(num_ftrs, 500)
-
+        # 마지막 분류기 레이어 수정 (500 클래스에 맞게 설정)
+        num_classes = 500
+        self.efficientnet.reset_classifier(num_classes=num_classes)
+    
     def forward(self, x):
         x = self.efficientnet(x)
         return x

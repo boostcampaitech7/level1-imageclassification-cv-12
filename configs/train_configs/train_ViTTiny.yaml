@@ -1,0 +1,39 @@
+data_module: "src.data.custom_data_module.data_module.DataModule"
+model_module: "src.plmodules.ViTTiny_module.BaseModule"  # Change to ViTTiny module
+
+data_config_path: "/data/ephemeral/home/JSM_Secret_Code/configs/data_configs/data_module.yaml"
+augmentation_config_path: "/data/ephemeral/home/JSM_Secret_Code/configs/augmentation_configs/data_augmentation.yaml"
+
+model:
+  lr: 0.0003  # ViTs generally work well with lower learning rates
+
+optimizer:
+  name: AdamW  # AdamW optimizer is commonly used for Transformer-based models
+  params:
+    lr: 0.0003  # Initial learning rate tuned for Vision Transformer
+    weight_decay: 0.01  # Regularization with weight decay
+
+scheduler:
+  name: CosineAnnealingLR  # Cosine annealing is often used for transformers
+  params:
+    T_max: 10  # Number of iterations for a full cosine cycle
+    eta_min: 1e-6  # Minimum learning rate
+
+trainer:
+  max_epochs: 40  # ViTs may require more epochs for training
+  accelerator: gpu
+  devices: 1
+  precision: 16  # Using Mixed Precision for better efficiency on ViT
+
+callbacks:
+  model_checkpoint:
+    monitor: val_loss
+    save_top_k: 3  # Save the top 3 models based on validation loss
+    mode: min
+  early_stopping:
+    monitor: val_loss
+    patience: 6  # Allow more epochs for potential learning improvements
+    mode: min
+
+seed: 14  # Set seed for reproducibility
+use_kfold: false  # Not using K-Fold cross-validation

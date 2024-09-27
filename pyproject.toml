@@ -5,13 +5,14 @@ description = ""
 authors = ["CV12 <https://github.com/boostcampaitech7/level1-imageclassification-cv-12.git>"]
 readme = "README.md"
 
+
 [tool.poetry.dependencies]
 python = "^3.10.13"
 pytorch-lightning = "^2.4.0"
 torch = { version = "^2.4.0", extras = ["cuda12"] }
 torchvision = { version = "^0.19.0", extras = ["cuda12"] }
 omegaconf = "^2.3.0"
-numpy = "^2.1.0"
+numpy = ">=1.24.4"  # Ensuring compatibility with albumentations
 pandas = "^2.2.2"
 pillow = "^10.4.0"
 requests = "^2.32.3"
@@ -23,6 +24,7 @@ scikit-learn = "^1.5.1"
 pytz = "^2024.2"
 
 
+_______________________________________> timm, albumentations 설치 필요 
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.8.0"

@@ -3,8 +3,9 @@ import argparse
 import pytorch_lightning as pl
 from omegaconf import OmegaConf
 
-from src.data.custom_dataModules.sketch_data_module import SketchDataModule
-from src.plmodules.base_module import SketchBaseModule
+from src.data.custom_data_module.data_module import DataModule
+from src.plmodules.base_module import BaseModule
+
 
 
 def main(config_path, checkpoint_path=None):
@@ -16,7 +17,7 @@ def main(config_path, checkpoint_path=None):
     data_config_path = config.data_config_path
     augmentation_config_path = config.augmentation_config_path
     seed = config.get("seed", 42)  # 시드 값을 설정 파일에서 읽어오거나 기본값 42 사용
-    data_module = SketchDataModule(data_config_path, augmentation_config_path, seed)
+    data_module = DataModule(data_config_path, augmentation_config_path, seed)
     data_module.setup()
 
     # 체크포인트 경로 설정
@@ -29,7 +30,7 @@ def main(config_path, checkpoint_path=None):
     print(f"Using checkpoint path: {checkpoint_path}")  # 경로가 제대로 설정되었는지 확인
     
     # 모델 설정
-    model = SketchBaseModule.load_from_checkpoint(checkpoint_path, config=config)
+    model = BaseModule.load_from_checkpoint(checkpoint_path, config=config)
 
     # 트레이너 설정
     trainer = pl.Trainer(

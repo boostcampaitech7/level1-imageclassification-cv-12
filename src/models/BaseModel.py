@@ -2,15 +2,15 @@ import torch
 import torch.nn as nn
 import timm
 
-class EfficientNetB3(nn.Module):
+class EfficientNetV2L(nn.Module):
     def __init__(self, config):
-        super(EfficientNetB3, self).__init__()
+        super(EfficientNetV2L, self).__init__()
         self.config = config
         
-        # 사전 학습된 EfficientNet-B3 모델 로드
-        self.efficientnet = timm.create_model('efficientnet_b3', pretrained=True)
+        # Load the pre-trained EfficientNetV2-L model from timm
+        self.efficientnet = timm.create_model('tf_efficientnetv2_l', pretrained=True)
         
-        # 마지막 분류기 레이어 수정 (500 클래스에 맞게 설정)
+        # Modify the last classifier layer to match 500 classes
         num_classes = 500
         self.efficientnet.reset_classifier(num_classes=num_classes)
     

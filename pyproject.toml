@@ -24,8 +24,11 @@ pytz = "^2024.2"
 jupyter-client = "^8.6.3"
 jupyter-core = "^5.7.2"
 matplotlib-inline = "^0.1.7"
-
-
+timm = "^0.9.5"  # TIMM 추가
+opencv-python = "^4.8.0"  # OpenCV 추가
+torchcontrib = "^0.0.2"  # torchcontrib(SWA 포함)
+efficientnet-pytorch = "^0.7.1"  # EfficientNet-PyTorch 추가
+albumentations = "^1.4.16"  # Albumentations 추가
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.8.0"

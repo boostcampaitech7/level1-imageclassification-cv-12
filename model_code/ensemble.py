@@ -8,6 +8,15 @@ import pandas as pd
 import pytz
 from datetime import datetime
 
+
+'''
+    해당 파일은 앙상블을 수행하는 코드입니다.
+    해당 코드는 모든 ckpt 값을 사람이 직접 커스텀 가능합니다. 즉, yaml 파일에 직접 가중치를 부여하여 voting을 진행하게 됩니다.
+
+    실행 방법  : python ensemble.py --config /path/to/ensemble.yaml
+'''
+
+
 def main(config_path, use_wandb=False):
     # YAML 파일 로드
     config = OmegaConf.load(config_path)

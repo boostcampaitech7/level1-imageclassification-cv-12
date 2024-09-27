@@ -6,7 +6,12 @@ from omegaconf import OmegaConf
 from src.data.custom_data_module.data_module import DataModule
 from src.plmodules.base_module import BaseModule
 
+'''
+    해당 파일은 train을 통해 나온 .ckpt를 활용하여 실제 csv 파일을 출력하는 코드입니다.
+    최종적으로 데이터 클래스의 분포 평균을 출력하게 됩니다.
 
+    실행 방법 : python test.py --config /path/to/test.yaml --use_wandb
+'''
 
 def main(config_path, checkpoint_path=None):
     # YAML 파일 로드

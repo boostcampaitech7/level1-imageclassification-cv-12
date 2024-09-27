@@ -3,8 +3,15 @@ from diffusers import StableDiffusionPipeline
 import os
 import pandas as pd
 
+
+'''
+    해당 파일은 텍스트를 활용하여 원하는 이미지를 생성할 서 있는 stable diffusion 파일입니다.
+
+    원하는 prompt를 입력하여 새로운 이미지를 활용하게 됩니다.
+'''
+
 # Hugging Face API 토큰
-hf_token = "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"  # 실제 Hugging Face 토큰으로 교체하세요.
+hf_token = ""  # Replace with your actual Hugging Face API token.
 
 # Stable Diffusion 모델 로드
 model_id = "stabilityai/stable-diffusion-2-1"
@@ -32,12 +39,12 @@ try:
             generated_images = pipe(prompt=prompt, guidance_scale=7.5).images  # 이미지 생성
 
         # 생성된 이미지 저장 경로 설정
-        output_image_path = os.path.join(output_dir, f"generated_under_Indian_hockey_{i+1}.jpg")
+        output_image_path = os.path.join(output_dir, f"generated_{i+1}.jpg")
         generated_image = generated_images[0]
         generated_image.save(output_image_path)
 
         # CSV 데이터 추가 (이미지 경로)
-        csv_data.append(["hockey", output_image_path, "hockey"])
+        csv_data.append(["", output_image_path, ""])
 
         print(f"Generated and saved image {i+1}/10")
 

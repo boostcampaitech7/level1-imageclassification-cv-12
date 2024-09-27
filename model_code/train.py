@@ -15,6 +15,16 @@ from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
 from datetime import datetime  # 시간 정보를 가져오기 위해 추가
 
+
+'''
+    해당 파일은 데이터를 학습하는 코드입니다. 해당 코드에서는 원하는 train.yaml을 활용하게 되며, 
+    이는 원하는 모델로 학습을 가능하도록 지원하고 있습니다.
+
+    실행방법 : python train.py --config /path/to/train.yaml --use_wandb
+
+'''
+
+
 def main(config_path, use_wandb=True):
     # Config 파일 로드
     config = OmegaConf.load(config_path)
@@ -27,7 +37,7 @@ def main(config_path, use_wandb=True):
     seed = config.get("seed", 42)
     data_module = DataModuleClass(data_config_path, augmentation_config_path, seed)
 
-    # Wandb Logger 설정
+    # Wandb Logger 설정: project명과 name 수정
     logger = WandbLogger(project="SWEEP!", name="Sweep") if use_wandb else None
     data_module.setup()
 

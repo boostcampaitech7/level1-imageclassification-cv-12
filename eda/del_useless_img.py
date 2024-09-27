@@ -1,5 +1,9 @@
 import os
 
+'''
+    max_os와 관련된 데이터들을 모두 삭제하게 됩니다.
+    
+'''
 # 작업할 폴더 경로 지정
 target_folder = '/data/ephemeral/home/level1-imageclassification-cv-12/data'
 

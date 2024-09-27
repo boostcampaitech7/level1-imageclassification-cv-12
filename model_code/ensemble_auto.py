@@ -9,6 +9,14 @@ import pytz
 from datetime import datetime
 import re  # 정규 표현식 사용을 위한 import
 
+
+'''
+    해당 파일은 앙상블을 수행하는 코드입니다.
+    해당 코드는 ckpt 적용시 작성되는 loss를 활용하여 loss의 역수를 곱하여 자동으로 가중치를 설정하게 됩니다.
+
+    실행 방법  : python ensemble_auto.py --config /path/to/ensemble.yaml
+'''
+
 def extract_val_loss_from_checkpoint(checkpoint_path):
     # 체크포인트 파일명에서 val_loss 값을 추출하는 정규식
     match = re.search(r"val_loss=([\d\.]+)", checkpoint_path)

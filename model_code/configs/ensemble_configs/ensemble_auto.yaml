@@ -6,15 +6,12 @@ augmentation_config_path: "/data/ephemeral/home/JSM_Secret_Code/configs/augmenta
 models:
   - module: "src.plmodules.base_module.BaseModule"
     checkpoint: "/data/ephemeral/home/JSM_Secret_Code/epoch_results_simpleAug_CoAtNet_continue/fold_1/epoch=epoch=26-val_loss=val_loss=0.98-20240924-112213.ckpt"
-    weight : 1
 
   - module: "src.plmodules.base_module.BaseModule"
     checkpoint: "/data/ephemeral/home/JSM_Secret_Code/epoch_results_simpleAug_CoAtNet_continue/fold_1/epoch=epoch=28-val_loss=val_loss=0.98-20240924-112213.ckpt"
-    weight : 1
 
   - module: "src.plmodules.base_module.BaseModule"
     checkpoint: "/data/ephemeral/home/JSM_Secret_Code/epoch_results_simpleAug_CoAtNet_continue/fold_1/epoch=epoch=29-val_loss=val_loss=0.98-20240924-112213.ckpt"
-    weight : 1
 
 
 model: 'CoAtNet3'

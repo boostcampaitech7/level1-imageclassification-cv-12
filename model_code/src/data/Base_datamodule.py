@@ -4,7 +4,15 @@ from typing import Any, Dict, Optional
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader, Dataset
 
+'''
+    해당 코드는 pytorch ligthening 에서 필요로 하는 기본적인 함수드를 구현해둔 코드입니다.
 
+    Args : Config 
+
+
+    Return : DataLoder 등 data_moudle에서 사용 가능하도록 return 해줍니다.
+
+'''
 class BaseDataModule(pl.LightningDataModule):
 
 

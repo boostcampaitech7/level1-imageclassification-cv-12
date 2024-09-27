@@ -10,7 +10,15 @@ from src.data.datasets.dataset import CustomDataset
 from src.data.collate_fns.collate_fn import collate_fn
 from torch.utils.data import Subset
 
+'''
+    해당 함수는 데이터를 받아와 train / test 별 전처리가 가능합니다.
+    또한 config의 증강을 활용하여 train 데이터에 대한 증강 처리를 지원합니다.
 
+    Args : data_config_path, augmentation_config_path, seed
+
+    Retrun : train_loader, test_loader, augmentation_transform 등 각 함수에 따라 다르게 적용
+
+'''
 class DataModule(BaseDataModule):
     def __init__(self, data_config_path: str, augmentation_config_path: str, seed: int):
         self.data_config = load_yaml_config(data_config_path)

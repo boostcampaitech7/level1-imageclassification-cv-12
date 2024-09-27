@@ -3,6 +3,14 @@ import pandas as pd
 from PIL import Image
 from torch.utils.data import Dataset
 
+'''
+    해당 함수는 실제 함수를 가져오은 함수입니다.
+    data_config에서 data_dir를 통해서 실제 데이터, train_csv &  test, test_csv 을 가지고 오게 됩니다.
+
+    Args : data_dir, train , transfrom
+
+    Return : image, label
+'''
 
 class CustomDataset(Dataset):
     def __init__(self, data_dir, train=True, transform=None):
@@ -40,7 +48,7 @@ class CustomDataset(Dataset):
         image = Image.open(img_path).convert("RGB")
 
         if self.transform:
-            image = self.transform(image)  # 오타 수정 (iamge -> image)
+            image = self.transform(image)
 
         # 학습 데이터인 경우에만 라벨 반환
         label = int(self.labels[idx]) if self.train else -1

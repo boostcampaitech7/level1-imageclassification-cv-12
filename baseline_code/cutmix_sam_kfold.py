@@ -19,6 +19,23 @@ from efficientnet_pytorch import EfficientNet
 from sklearn.model_selection import StratifiedKFold
 import random
 
+"""
+SAM (Sharpness-Aware Minimization), CutMix, KFold 교차 검증을 적용한 코드입니다.
+
+1. KFold 교차 검증: 
+   - StratifiedKFold를 사용하여 훈련 데이터셋을 여러 개의 폴드로 나누고, 각 폴드에 대해 모델을 훈련하고 검증합니다.
+   s
+2. SAM (Sharpness-Aware Minimization):
+   - 모델의 손실을 최소화하는 데 도움이 되는 기법으로, 모델의 가중치를 두 단계로 업데이트하여 더욱 견고한 학습을 수행합니다.
+
+3. CutMix:
+   - 데이터 증강 기법으로, 두 이미지를 합성하여 새로운 이미지를 생성합니다. 이는 모델이 다양한 변형에 대해 학습하도록 돕습니다.
+   - `rand_bbox`: 주어진 이미지 크기와 lambda 값에 따라 잘라낼 영역을 생성합니다.
+
+ 실행 방법 : python cutmix_sam_kfold.py 
+ 
+"""
+
 class CustomDataset(Dataset):
     def __init__(self, root_dir: str, info_df: pd.DataFrame, transform: Callable, num_classes : int ,is_inference: bool = False):
         self.root_dir = root_dir

@@ -8,6 +8,18 @@ import torch
 import numpy as np
 import torchvision.transforms.functional as F
 
+'''
+
+transformations에 원하는 증강을 추가
+
+추가된 증강만큼 원본 데이터 수가 늘어나며
+
+이후 입력받는 파일명으로 폴더 생성 후 증강된 이미지 저장
+
+Return : 원본 + 증강된 이미지
+
+'''
+
 
 def augment_and_save_images(data_dir, save_dir, folder_name):
     images_path = os.path.join(data_dir, 'train')
@@ -37,14 +49,7 @@ def augment_and_save_images(data_dir, save_dir, folder_name):
 
         # 증강 기법을 적용하여 저장
         transformations = [
-            ('v_flipped', F.vflip(image)),
-            ('h_flipped', F.hflip(image)),
-            ('vh_flipped', F.hflip(F.vflip(image))),
-            ('rotated_180', F.rotate(image, angle=180)),
-            ('inverted', F.invert(image)),
-            ('cropped', transforms.RandomResizedCrop(size=image.size, scale=(0.8, 0.8))(image)),
-            ('rotated_10', F.rotate(image, angle=10)),
-            ('gaussian_blur', image.filter(ImageFilter.GaussianBlur(radius=2)))  # 가우시안 블러 추가
+            ('v_flipped', F.vflip(image)), # 원하는 증강 추가(v_flipped 는 예시)
         ]
 
         for aug_name, aug_image in transformations:

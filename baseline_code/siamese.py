@@ -20,6 +20,14 @@ from sklearn.model_selection import StratifiedKFold
 from torch.amp import autocast, GradScaler
 import random
 
+"""
+    Siamese Neural networks 
+    데이터의 양이 적다고 판단되어, one-shot learning 기법 중 하나인 siamese neural network 를 사용하였습니다. 
+    이를 통해서 데이터의 부족함을 보충하려고 시도해본 코드입니다. 
+
+    실행 방법 : python siamses.py  
+
+"""
 ##################################### Dataset ###############################################
 class CustomDataset(Dataset):
     def __init__(self, root_dir: str, info_df: pd.DataFrame, transform: Callable, num_classes : int ,is_inference: bool = False):

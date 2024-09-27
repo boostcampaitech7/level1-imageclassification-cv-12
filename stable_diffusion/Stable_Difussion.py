@@ -4,8 +4,16 @@ from PIL import Image
 import os
 import pandas as pd
 
+
+'''
+    해당 파일은 이미지와 텍스트를 활용하여 원하는 이미지를 생성할 수 있는 stable diffusion 파일입니다.
+
+    원하는 이미지 파일과 prompt를 입력하여 새로운 이미지를 활용하게 됩니다.
+
+'''
+
 # Hugging Face API 토큰
-hf_token = "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"  # 실제 Hugging Face 토큰으로 교체하세요.
+hf_token = ""  # Replace with your actual Hugging Face API token.
 
 # Stable Diffusion 모델 로드
 model_id = "stabilityai/stable-diffusion-2-1"
@@ -18,12 +26,12 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 pipe.to(device)
 
 # 기본 경로 설정
-image_path = "/data/ephemeral/home/level1-imageclassification-cv-12/생성된이미지/KakaoTalk_Photo_2024-09-25-23-15-57.png"
+image_path = "/data/ephemeral/home/level1-imageclassification-cv-12/생성된이미지/.png"
 output_dir = "/data/ephemeral/home/level1-imageclassification-cv-12/생성된이미지"
 os.makedirs(output_dir, exist_ok=True)
 
 # 텍스트 프롬프트 설정
-prompt = "“A highly detailed pencil sketch of the front view of a yellow school bus, showing intricate details of the headlights, grille, and front body. The image should appear as if drawn in grayscale, with soft shading and defined lines, giving it a hand-drawn look like a realistic pencil sketch.”"
+prompt = ""
 
 # 이미지 처리 및 생성
 try:

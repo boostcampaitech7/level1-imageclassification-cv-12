@@ -47,13 +47,13 @@ Sketch 이미지에 대한 classficiation 대회입니다. 데이터는 총 500�
 
 **Best Data Augmentation** : 1. 단순한 Flip 형태의 증강(좌우, 상하, 상하좌우), 2. Rotate 증강(15도 이내) 3. Color Inver ( 색상반전 ) 
 
-**모델** : Coatnet , efficientnetB4, resnet101
+**모델** : Coatnet | efficientnetB4 | resnet101
 
 **Optimizer** :  Adam | SGD | SAM | AdamW
 
 **Scheduler** : StepLR | OneCycleLR
 
-**생성형 모델** :  Stable Diffusion ([Link](https://github.com/clovaai/CutMix-PyTorch](https://huggingface.co/stabilityai/stable-diffusion-2-1)))
+**생성형 모델** :  Stable Diffusion ( Image + Prompt ) ([Link](https://github.com/clovaai/CutMix-PyTorch](https://huggingface.co/stabilityai/stable-diffusion-2-1)))
 
 ** **
 

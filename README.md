@@ -37,15 +37,27 @@ CoatNet, Efficientnet 위주로 실험을 진행하였습니다.
 
 ## 사용된 기법 
 
-**Best Data Augmentation** : 1. 단순한 Flip 형태의 증강(좌우, 상하, 상하좌우), 2. Rotate 증강(15도 이내)
+**Best Data Augmentation** : 1. 단순한 Flip 형태의 증강(좌우, 상하, 상하좌우), 2. Rotate 증강(15도 이내) 3. Color Inver ( 색상반전 ) 
 
 **모델** : Coatnet , efficientnetB4, resnet101
 
-**Optimizer** :  Adam, SGD, SAM 
+**Optimizer** :  Adam, SGD, SAM, AdamW
 
-**생성형 모델** :  Stable Diffusion
+**Scheduler** : StepLR, OneCycleLR
+
+**생성형 모델** :  Stable Diffusion ([Link](https://github.com/clovaai/CutMix-PyTorch](https://huggingface.co/stabilityai/stable-diffusion-2-1)))
 
 <br>
+
+<br>
+
+## 실행 환경
+GPU : TESLA V100
+RAM : 32GB
+Storage : 100GB
+![image](https://github.com/user-attachments/assets/2d404100-0eeb-41f4-b900-db211183fb22)
+
+
 
 ## Reference
 [1] SAM ([Link](https://github.com/davda54/sam))

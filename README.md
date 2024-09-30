@@ -25,20 +25,27 @@ Sketch 이미지에 대한 classficiation 대회입니다. 데이터는 총 500�
 
 해당 대회의 특징으로는 실제 이미지가  아닌 스케치 이미지의 분류로, 보다 간결한 선으로 해당 객체를 분류할 수 있어야 한다는 점 입니다.
 
+<br>
 
 ## [Classification Model 성능 비교]
 ![image](https://github.com/user-attachments/assets/216b28e6-6ac2-4d57-bc91-f3a255eaf546)
 
 
+CoatNet, Efficientnet 위주로 실험을 진행하였습니다. 
+
+<br>
 
 ## 사용된 기법 
-Best Data Augmentation : 1. 단순한 Flip 형태의 증강(좌우, 상하, 상하좌우), 2. Rotate 증강(15도 이내)
 
-모델 : Coatnet , efficientnetB4, resnet101
+**Best Data Augmentation** : 1. 단순한 Flip 형태의 증강(좌우, 상하, 상하좌우), 2. Rotate 증강(15도 이내)
 
-Optimizer :  Adam, SGD, SAM 
+**모델** : Coatnet , efficientnetB4, resnet101
 
-생성형 모델 :  Stable Diffusion
+**Optimizer** :  Adam, SGD, SAM 
+
+**생성형 모델** :  Stable Diffusion
+
+<br>
 
 ## Reference
 [1] SAM ([Link](https://github.com/davda54/sam))

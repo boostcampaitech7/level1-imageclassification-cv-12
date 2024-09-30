@@ -41,9 +41,9 @@ CoatNet, Efficientnet 위주로 실험을 진행하였습니다.
 
 **모델** : Coatnet , efficientnetB4, resnet101
 
-**Optimizer** :  Adam, SGD, SAM, AdamW
+**Optimizer** :  Adam | SGD | SAM | AdamW
 
-**Scheduler** : StepLR, OneCycleLR
+**Scheduler** : StepLR | OneCycleLR
 
 **생성형 모델** :  Stable Diffusion ([Link](https://github.com/clovaai/CutMix-PyTorch](https://huggingface.co/stabilityai/stable-diffusion-2-1)))
 
@@ -52,9 +52,9 @@ CoatNet, Efficientnet 위주로 실험을 진행하였습니다.
 <br>
 
 ## 실행 환경
-GPU : TESLA V100
-RAM : 32GB
-Storage : 100GB
+GPU : TESLA V100 <br>
+RAM : 32GB <br >
+Storage : 100GB <br>
 ![image](https://github.com/user-attachments/assets/2d404100-0eeb-41f4-b900-db211183fb22)
 
 

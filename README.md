@@ -58,30 +58,41 @@ Storage : 100GB <br>
 <img src="https://github.com/user-attachments/assets/2d404100-0eeb-41f4-b900-db211183fb22" alt="image" width="70%">
 
 <br>
-# Poetry 설치 방법
-
 ### Poetry 설치
 <pre><code>curl -sSL https://install.python-poetry.org | python3 -
 </code></pre>
-
 <br>
-
 ### 환경 변수 반영
 <pre><code>export PATH="$HOME/.local/bin:$PATH"
 </code></pre>
-
 <br>
-
 ### 관련 라이브러리 설치
 <pre><code>poetry install
 </code></pre>
-
 <br>
-
 ### Poetry 가상환경 실행
 <pre><code>poetry shell
 </code></pre>
 
+<br>
+
+# Train, Test, Ensemble 실행 방법
+
+### Train 실행 방법
+<pre><code>python train.py --config /path/to/your_train_config.yaml --use_wandb
+</code></pre>
+
+<br>
+
+### Test 실행 방법
+<pre><code>python test.py --config /path/to/your_test_config.yaml
+</code></pre>
+
+<br>
+
+### Ensemble 실행 방법
+<pre><code>python ensemble.py --config /path/to/your/ensemble_config.yaml
+</code></pre>
 
 
 

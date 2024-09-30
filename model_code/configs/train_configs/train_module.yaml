@@ -1,0 +1,39 @@
+data_module: "src.data.custom_data_module.data_module.DataModule"
+model_module: "src.plmodules.base_module.BaseModule"
+
+data_config_path: "/data/ephemeral/home/JSM_Secret_Code/configs/data_configs/data_module.yaml"
+augmentation_config_path: "/data/ephemeral/home/JSM_Secret_Code/configs/augmentation_configs/data_augmentation.yaml"
+
+model:
+  lr: 0.0001  # EfficientNet-B4는 낮은 학습률에 민감하므로 더 낮은 값으로 조정하여 학습 속도 느리게 함.
+
+optimizer:
+  name: Adam  # Adam 옵티마이저 사용
+  params:
+    lr: 0.0001  # 더 낮은 초기 학습률 설정
+    weight_decay: 0.0001  # Regularization 추가
+
+scheduler:
+  name: CosineAnnealingLR  # CosineAnnealing 스케줄러로 학습률을 천천히 줄임
+  params:
+    T_max: 50  # 총 주기(epoch)의 수
+    eta_min: 0.00001  # 최소 학습률 설정
+
+trainer:
+  max_epochs: 50  # 학습 에포크를 늘려서 학습 진행을 느리게 함
+  accelerator: gpu
+  devices: 1
+  precision: 16  # Mixed Precision 사용하여 메모리 효율 개선
+
+callbacks:
+  model_checkpoint:
+    monitor: val_loss
+    save_top_k: 5  # validation loss가 좋은 상위 5개 모델 저장
+    mode: min
+  early_stopping:
+    monitor: val_loss
+    patience: 7  # 성능 향상이 없을 경우 7 에포크 이후 중단
+    mode: min
+
+seed: 44  # 재현성 확보를 위한 시드 값 설정
+use_kfold: True  # K-Fold cross-validation 사용 안 함

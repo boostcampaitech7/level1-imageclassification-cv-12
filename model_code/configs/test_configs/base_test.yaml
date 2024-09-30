@@ -1,0 +1,14 @@
+data_module: "src.data.custom_data_module.data_module.DataModule"
+model_module: "src.plmodules.base_module.BaseModule"
+
+data_config_path: "/data/ephemeral/home/JSM_Secret_Code/configs/data_configs/data_module.yaml"
+augmentation_config_path: "/data/ephemeral/home/JSM_Secret_Code/configs/augmentation_configs/data_augmentation.yaml"
+checkpoint_path: "/data/ephemeral/home/JSM_Secret_Code/epoch_results_simpleAug_resnet101/fold_1/epoch=epoch=14-val_loss=val_loss=1.02-20240923-160205.ckpt"
+model:
+  lr: 0.001
+
+trainer:
+  accelerator: gpu
+  devices: 1
+
+seed: 42

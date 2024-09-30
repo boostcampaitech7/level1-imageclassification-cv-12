@@ -55,7 +55,34 @@ CoatNet, Efficientnet 위주로 실험을 진행하였습니다.
 GPU : TESLA V100 <br>
 RAM : 32GB <br >
 Storage : 100GB <br>
-![image](https://github.com/user-attachments/assets/2d404100-0eeb-41f4-b900-db211183fb22)
+<img src="https://github.com/user-attachments/assets/2d404100-0eeb-41f4-b900-db211183fb22" alt="image" width="70%">
+
+<br>
+# Poetry 설치 방법
+
+### Poetry 설치
+<pre><code>curl -sSL https://install.python-poetry.org | python3 -
+</code></pre>
+
+<br>
+
+### 환경 변수 반영
+<pre><code>export PATH="$HOME/.local/bin:$PATH"
+</code></pre>
+
+<br>
+
+### 관련 라이브러리 설치
+<pre><code>poetry install
+</code></pre>
+
+<br>
+
+### Poetry 가상환경 실행
+<pre><code>poetry shell
+</code></pre>
+
+
 
 
 

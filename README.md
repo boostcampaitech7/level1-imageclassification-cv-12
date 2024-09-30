@@ -101,9 +101,9 @@ Ensemble 실행 방법
 EfficienNet B4와 CoAtNet3의 val acc에서 90%를 넘는 높은 성능을 보였으며, Test 데이터에 대해서 EfficienNetB4 : 88% | CoAtNet3 : 90.1% 정확도를 보여주었습니다. 이미지 증강의 경우 RGB 색상 Nomalization, Resize(224,224)를 기본 증강으로 사용하였고, Flip, Rotation, Invert, 생성형 이미지를 사용하용하는 것이 가장 높은 성능을 보여주었습니다.
 최종적으로 CoAtNet3 + EfficienNetB4 + ResNet + MaxViT ensemble을 통해서 private score : 92.2%를 얻을수 있었습니다.
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/35999188-1da5-4ff6-b082-39cbcbac1f4d" alt="image1" width="520"/>
+  <img src="https://github.com/user-attachments/assets/35999188-1da5-4ff6-b082-39cbcbac1f4d" alt="image1" width="700"/>
  <br>
-  <img src="https://github.com/user-attachments/assets/88a68763-64aa-4b1a-ad1a-aad338ccb402" alt="image2" width="520"/>
+  <img src="https://github.com/user-attachments/assets/88a68763-64aa-4b1a-ad1a-aad338ccb402" alt="image2" width="700"/>
 </div>
 
 

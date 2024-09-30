@@ -13,7 +13,7 @@ Sketch기반 이미지를 분류하여 어떤 객체를 나타내는지 예측�
 | <img src="https://github.com/user-attachments/assets/260116cd-e256-412f-a050-c40fe591a114" width="300"> | <img src="https://github.com/user-attachments/assets/6b676bff-a891-48b8-a1f8-2341e9b0b9cf" width="300"> | <img src="https://github.com/user-attachments/assets/7bca579f-f5bd-49be-94be-65dd61f1d71e" width="300"> | <img src="https://github.com/user-attachments/assets/1fc8bf87-5217-457e-b75d-cd9dff1c74ae" width="300"> | <img src="https://github.com/user-attachments/assets/58e0383c-6664-4728-bbbd-2e800b8c6eaf" width="300"> | <img src="https://github.com/user-attachments/assets/c166048d-813f-463d-a590-a47e48ef91ac" width="300"> |
 | EDA / Data processing | EDA / Data processing | Modeling / Ensemble | 	Modeling / Ensemble	| Modeling / 코드 모듈화 / wandb 셋팅  / Ensemble | EDA / Data processing  |
 
-<br>
+** **
 
 ## [프로젝트 개요]
 
@@ -33,7 +33,7 @@ Sketch 이미지에 대한 classficiation 대회입니다. 데이터는 총 500�
 
 CoatNet, Efficientnet 위주로 실험을 진행하였습니다. 
 
-<br>
+** **
 
 ## 사용된 기법 
 
@@ -47,7 +47,7 @@ CoatNet, Efficientnet 위주로 실험을 진행하였습니다.
 
 **생성형 모델** :  Stable Diffusion ([Link](https://github.com/clovaai/CutMix-PyTorch](https://huggingface.co/stabilityai/stable-diffusion-2-1)))
 
-<br>
+** **
 
 <br>
 
@@ -57,25 +57,25 @@ RAM : 32GB <br >
 Storage : 100GB <br>
 <img src="https://github.com/user-attachments/assets/2d404100-0eeb-41f4-b900-db211183fb22" alt="image" width="70%">
 
-<br>
+** **
 
-### Poetry 설치
+Poetry 설치
 <pre><code>curl -sSL https://install.python-poetry.org | python3 -
 </code></pre>
 <br>
-### 환경 변수 반영
+환경 변수 반영
 <pre><code>export PATH="$HOME/.local/bin:$PATH"
 </code></pre>
 <br>
-### 관련 라이브러리 설치
+관련 라이브러리 설치
 <pre><code>poetry install
 </code></pre>
 <br>
-### Poetry 가상환경 실행
+Poetry 가상환경 실행
 <pre><code>poetry shell
 </code></pre>
 
-<br>
+** **
 
 # Train, Test, Ensemble 실행 방법
 
@@ -101,8 +101,9 @@ Ensemble 실행 방법
 EfficienNet B4와 CoAtNet3의 val acc에서 90%를 넘는 높은 성능을 보였으며, Test 데이터에 대해서 EfficienNetB4 : 88% | CoAtNet3 : 90.1% 정확도를 보여주었습니다. 이미지 증강의 경우 RGB 색상 Nomalization, Resize(224,224)를 기본 증강으로 사용하였고, Flip, Rotation, Invert, 생성형 이미지를 사용하용하는 것이 가장 높은 성능을 보여주었습니다.
 최종적으로 CoAtNet3 + EfficienNetB4 + ResNet + MaxViT ensemble을 통해서 private score : 92.2%를 얻을수 있었습니다.
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/35999188-1da5-4ff6-b082-39cbcbac1f4d" alt="image1" width="400"/>
-  <img src="https://github.com/user-attachments/assets/88a68763-64aa-4b1a-ad1a-aad338ccb402" alt="image2" width="400"/>
+  <img src="https://github.com/user-attachments/assets/35999188-1da5-4ff6-b082-39cbcbac1f4d" alt="image1" width="520"/>
+ <br>
+  <img src="https://github.com/user-attachments/assets/88a68763-64aa-4b1a-ad1a-aad338ccb402" alt="image2" width="520"/>
 </div>
 
 
